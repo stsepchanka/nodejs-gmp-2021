@@ -2,7 +2,7 @@ import express from "express";
 import { Router } from "express";
 
 import { UserRepository } from "../repositories";
-import { UserMiddleware, validateSchema } from "../middleware";
+import { UserController, validateSchema } from "../middleware";
 import { UserService } from "../services";
 import { userSchema } from "../models";
 
@@ -10,7 +10,7 @@ export function usersRouter(): Router {
   const router = express.Router();
   const userRepository = new UserRepository();
   const userService = new UserService(userRepository);
-  const userMiddleware = new UserMiddleware(userService);
+  const userMiddleware = new UserController(userService);
 
   router.route("/auto-suggest").get(userMiddleware.autoSuggest());
 

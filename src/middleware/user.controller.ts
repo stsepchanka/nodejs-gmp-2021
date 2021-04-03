@@ -3,7 +3,7 @@ import { StatusCodes } from "http-status-codes";
 
 import { UserService } from "../services";
 
-export class UserMiddleware {
+export class UserController {
   constructor(private readonly userService: UserService) {}
 
   autoSuggest() {
@@ -17,7 +17,7 @@ export class UserMiddleware {
         );
         res.status(StatusCodes.OK).json(users);
       } catch (err) {
-        res.status(StatusCodes.BAD_REQUEST).send(err);
+        res.sendStatus(StatusCodes.BAD_REQUEST);
       }
     };
   }
@@ -29,7 +29,7 @@ export class UserMiddleware {
         const user = this.userService.getUserByID(userId);
         res.status(StatusCodes.OK).json(user);
       } catch (err) {
-        res.status(StatusCodes.NOT_FOUND).send(err);
+        res.sendStatus(StatusCodes.NOT_FOUND);
       }
     };
   }
@@ -41,7 +41,7 @@ export class UserMiddleware {
         const user = this.userService.updateUser(userId, req.body);
         res.status(StatusCodes.OK).json(user);
       } catch (err) {
-        res.status(StatusCodes.NOT_FOUND).send(err);
+        res.sendStatus(StatusCodes.NOT_FOUND);
       }
     };
   }
@@ -53,7 +53,7 @@ export class UserMiddleware {
         this.userService.deleteUserById(userId);
         res.status(StatusCodes.NO_CONTENT).end();
       } catch (err) {
-        res.status(StatusCodes.NOT_FOUND).send(err);
+        res.sendStatus(StatusCodes.NOT_FOUND);
       }
     };
   }
@@ -71,7 +71,7 @@ export class UserMiddleware {
         const user = this.userService.addUser(req.body);
         res.status(StatusCodes.CREATED).json(user);
       } catch (err) {
-        res.status(StatusCodes.BAD_REQUEST).send(err);
+        res.sendStatus(StatusCodes.BAD_REQUEST);
       }
     };
   }

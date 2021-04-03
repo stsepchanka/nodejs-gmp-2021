@@ -1,2 +1,2 @@
-export * from "./user.middleware";
+export * from "./user.controller";
 export * from "./validate.schema";

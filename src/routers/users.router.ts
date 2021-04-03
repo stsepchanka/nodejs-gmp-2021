@@ -2,8 +2,9 @@ import express from "express";
 import { Router } from "express";
 
 import { UserRepository } from "../repositories";
-import { UserMiddleware } from "../middleware";
+import { UserMiddleware, validateSchema } from "../middleware";
 import { UserService } from "../services";
+import { userSchema } from "../models";
 
 export function usersRouter(): Router {
   const router = express.Router();
@@ -16,13 +17,13 @@ export function usersRouter(): Router {
   router
     .route("/:id")
     .get(userMiddleware.getUserById())
-    .put(userMiddleware.updateUser())
+    .put(validateSchema(userSchema), userMiddleware.updateUser())
     .delete(userMiddleware.deleteUser());
 
   router
     .route("/")
     .get(userMiddleware.getUsers())
-    .post(userMiddleware.addUser());
+    .post(validateSchema(userSchema), userMiddleware.addUser());
 
   return router;
 }

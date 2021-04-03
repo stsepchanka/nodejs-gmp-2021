@@ -16,6 +16,10 @@ export class UserRepository {
   }
 
   addUser(user: User): User {
+    if (this.users.some((u) => u.login === user.login)) {
+      throw `User with login='${user.login}' already exists`;
+    }
+
     const newUser = { ...user, id: uuidv4(), isDeleted: false };
     this.users.push(newUser);
 
@@ -43,6 +47,6 @@ export class UserRepository {
       return index;
     }
 
-    throw new Error(`User with id=${id} is not found`);
+    throw `User with id=${id} is not found`;
   }
 }

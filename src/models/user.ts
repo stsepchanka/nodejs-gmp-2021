@@ -10,7 +10,11 @@ export interface IUser {
   isDeleted: boolean;
 }
 
-export class User extends Model {}
+export class User extends Model {
+  toDomain(): IUser {
+    return this.toJSON() as IUser;
+  }
+}
 
 User.init(
   {

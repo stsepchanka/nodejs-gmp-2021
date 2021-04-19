@@ -9,11 +9,10 @@ export class UserController {
   autoSuggest() {
     return async (req: Request, res: Response): Promise<void> => {
       try {
-        const loginSubstring = req.query.loginSubstring as string;
-        const limit = parseInt(req.query.limit as string);
+        const { loginSubstring, limit } = req.query;
         const users = await this.userService.getAutoSuggestUsers(
-          loginSubstring,
-          limit
+          loginSubstring as string,
+          parseInt(limit as string)
         );
         res.status(StatusCodes.OK).json(users);
       } catch (err) {

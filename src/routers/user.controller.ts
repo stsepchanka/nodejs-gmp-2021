@@ -7,13 +7,12 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   autoSuggest() {
-    return (req: Request, res: Response): void => {
+    return async (req: Request, res: Response): Promise<void> => {
       try {
-        const loginSubstring = req.query.loginSubstring as string;
-        const limit = parseInt(req.query.limit as string);
-        const users = this.userService.getAutoSuggestUsers(
-          loginSubstring,
-          limit
+        const { loginSubstring, limit } = req.query;
+        const users = await this.userService.getAutoSuggestUsers(
+          loginSubstring as string,
+          parseInt(limit as string)
         );
         res.status(StatusCodes.OK).json(users);
       } catch (err) {
@@ -23,10 +22,10 @@ export class UserController {
   }
 
   getUserById() {
-    return (req: Request, res: Response): void => {
+    return async (req: Request, res: Response): Promise<void> => {
       try {
         const userId = req.params.id;
-        const user = this.userService.getUserByID(userId);
+        const user = await this.userService.getUserByID(userId);
         res.status(StatusCodes.OK).json(user);
       } catch (err) {
         res.sendStatus(StatusCodes.NOT_FOUND);
@@ -35,22 +34,22 @@ export class UserController {
   }
 
   updateUser() {
-    return (req: Request, res: Response): void => {
+    return async (req: Request, res: Response): Promise<void> => {
       try {
         const userId = req.params.id;
-        const user = this.userService.updateUser(userId, req.body);
+        const user = await this.userService.updateUser(userId, req.body);
         res.status(StatusCodes.OK).json(user);
       } catch (err) {
-        res.sendStatus(StatusCodes.NOT_FOUND);
+        res.sendStatus(StatusCodes.BAD_REQUEST);
       }
     };
   }
 
   deleteUser() {
-    return (req: Request, res: Response): void => {
+    return async (req: Request, res: Response): Promise<void> => {
       try {
         const userId = req.params.id;
-        this.userService.deleteUserById(userId);
+        await this.userService.deleteUserById(userId);
         res.status(StatusCodes.NO_CONTENT).end();
       } catch (err) {
         res.sendStatus(StatusCodes.NOT_FOUND);
@@ -59,16 +58,20 @@ export class UserController {
   }
 
   getUsers() {
-    return (req: Request, res: Response): void => {
-      const users = this.userService.getUsers();
-      res.status(StatusCodes.OK).json(users);
+    return async (req: Request, res: Response): Promise<void> => {
+      try {
+        const users = await this.userService.getUsers();
+        res.status(StatusCodes.OK).json(users);
+      } catch {
+        res.sendStatus(StatusCodes.SERVICE_UNAVAILABLE);
+      }
     };
   }
 
   addUser() {
-    return (req: Request, res: Response): void => {
+    return async (req: Request, res: Response): Promise<void> => {
       try {
-        const user = this.userService.addUser(req.body);
+        const user = await this.userService.addUser(req.body);
         res.status(StatusCodes.CREATED).json(user);
       } catch (err) {
         res.sendStatus(StatusCodes.BAD_REQUEST);

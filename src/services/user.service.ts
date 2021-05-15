@@ -15,11 +15,7 @@ export class UserService {
       where: { id: userId, isDeleted: false },
     });
 
-    if (!user) {
-      throw `User with id=${userId} is not found`;
-    }
-
-    return user.toDomain();
+    return user?.toDomain() || null;
   }
 
   async getUserByLogin(login: string): Promise<IUser> {
@@ -27,20 +23,11 @@ export class UserService {
       where: { login, isDeleted: false },
     });
 
-    if (!user) {
-      throw `User with login=${login} is not found`;
-    }
-
-    return user.toDomain();
+    return user?.toDomain() || null;
   }
 
   async addUser(user: IUser): Promise<IUser> {
-    let userWithSameLogin;
-    try {
-      userWithSameLogin = await this.getUserByLogin(user.login);
-    } catch {
-      userWithSameLogin = null;
-    }
+    const userWithSameLogin = await this.getUserByLogin(user.login);
 
     if (!userWithSameLogin) {
       const newUser = await User.create(user);
@@ -51,14 +38,9 @@ export class UserService {
   }
 
   async updateUser(userId: string, user: IUser): Promise<IUser> {
-    let userWithSameLogin;
-    try {
-      userWithSameLogin = await this.getUserByLogin(user.login);
-    } catch {
-      userWithSameLogin = null;
-    }
+    const userWithSameLogin = await this.getUserByLogin(user.login);
 
-    if (userWithSameLogin.id === userId) {
+    if (!userWithSameLogin || userWithSameLogin.id === userId) {
       await User.update(user, { where: { id: userId } });
       return await this.getUserByID(userId);
     }

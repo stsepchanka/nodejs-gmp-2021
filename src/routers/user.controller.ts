@@ -26,9 +26,13 @@ export class UserController {
       try {
         const userId = req.params.id;
         const user = await this.userService.getUserByID(userId);
-        res.status(StatusCodes.OK).json(user);
+        if (user) {
+          res.status(StatusCodes.OK).json(user);
+        } else {
+          res.sendStatus(StatusCodes.NOT_FOUND);
+        }
       } catch (err) {
-        res.sendStatus(StatusCodes.NOT_FOUND);
+        res.sendStatus(StatusCodes.BAD_REQUEST);
       }
     };
   }
@@ -38,7 +42,11 @@ export class UserController {
       try {
         const userId = req.params.id;
         const user = await this.userService.updateUser(userId, req.body);
-        res.status(StatusCodes.OK).json(user);
+        if (user) {
+          res.status(StatusCodes.OK).json(user);
+        } else {
+          res.sendStatus(StatusCodes.NOT_FOUND);
+        }
       } catch (err) {
         res.sendStatus(StatusCodes.BAD_REQUEST);
       }
@@ -50,7 +58,7 @@ export class UserController {
       try {
         const userId = req.params.id;
         await this.userService.deleteUserById(userId);
-        res.status(StatusCodes.NO_CONTENT).end();
+        res.sendStatus(StatusCodes.NO_CONTENT);
       } catch (err) {
         res.sendStatus(StatusCodes.NOT_FOUND);
       }

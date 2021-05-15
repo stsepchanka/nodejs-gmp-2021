@@ -1,13 +1,13 @@
 import { app } from "./app";
-import { sequelize } from "./data-access/connectDB";
-import { config } from "./common/config";
+import { sequelize } from "./db/connectDB";
+import { PORT } from "./common/config";
 
 sequelize
   .authenticate()
   .then(() => {
     console.log("Connected to DB");
-    app.listen(config.PORT, () => {
-      console.log(`Server is running in http://localhost:${config.PORT}`);
+    app.listen(PORT, () => {
+      console.log(`Server is running in http://localhost:${PORT}`);
     });
   })
   .catch((error) => {

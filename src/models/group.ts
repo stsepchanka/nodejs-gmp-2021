@@ -1,14 +1,22 @@
 import * as Joi from "joi";
 import { DataTypes, Model, UUIDV4 } from "sequelize";
-import { sequelize } from "../data-access/connectDB";
+import { sequelize } from "../db/connectDB";
 
-export const PERMISSIONS = ["READ", "WRITE", "DELETE", "SHARE", "UPLOAD_FILES"];
-export type Permission = typeof PERMISSIONS[number];
+export enum Permission {
+  Read = "READ",
+  Write = "WRITE",
+  Delete = "DELETE",
+  Share = "SHARE",
+  Upload_Files = "UPLOAD_FILES",
+}
+export const PERMISSIONS = Object.values(Permission);
+
+export type GroupPermission = typeof PERMISSIONS[number];
 
 export interface IGroup {
   id: string;
   name: string;
-  permissions: Array<Permission>;
+  permissions: Array<GroupPermission>;
 }
 
 export class Group extends Model {
@@ -34,7 +42,7 @@ Group.init(
       get() {
         return this.getDataValue("permissions").split(", ");
       },
-      set(value: Permission[]) {
+      set(value: GroupPermission[]) {
         this.setDataValue("permissions", value.toString());
       },
       validate: {

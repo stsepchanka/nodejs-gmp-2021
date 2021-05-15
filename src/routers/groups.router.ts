@@ -22,7 +22,7 @@ export function groupsRouter(): Router {
     .get(groupController.getGroups())
     .post(validateSchema(groupSchema), groupController.addGroup());
 
-  router.route("/:id/add-users").post(groupController.addUsersToGroup());
+  router.route("/:id/users").post(groupController.addUsersToGroup());
 
   return router;
 }

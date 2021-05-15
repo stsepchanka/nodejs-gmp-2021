@@ -1,4 +1,4 @@
-import { sequelize } from "../data-access/connectDB";
+import { sequelize } from "../db/connectDB";
 import { IGroup } from "../models";
 import { Group } from "../models";
 

@@ -1,6 +1,6 @@
 import * as Joi from "joi";
 import { DataTypes, Model, UUIDV4 } from "sequelize";
-import { sequelize } from "./../data-access/connectDB";
+import { sequelize } from "../db/connectDB";
 
 export interface IUser {
   id: string;

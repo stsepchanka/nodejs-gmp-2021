@@ -1,7 +1,7 @@
 import { DataTypes, Model, UUIDV4 } from "sequelize";
 
 import { Group, User } from ".";
-import { sequelize } from "../data-access/connectDB";
+import { sequelize } from "../db/connectDB";
 
 export class UserGroup extends Model {}
 

@@ -50,7 +50,7 @@ export class UserController {
       try {
         const userId = req.params.id;
         await this.userService.deleteUserById(userId);
-        res.status(StatusCodes.NO_CONTENT).end();
+        res.sendStatus(StatusCodes.NO_CONTENT);
       } catch (err) {
         res.sendStatus(StatusCodes.NOT_FOUND);
       }

@@ -35,7 +35,7 @@ export class GroupController {
       try {
         const groupId = req.params.id;
         await this.groupService.deleteGroupById(groupId);
-        res.status(StatusCodes.NO_CONTENT).end();
+        res.sendStatus(StatusCodes.NO_CONTENT);
       } catch (err) {
         res.sendStatus(StatusCodes.NOT_FOUND);
       }
@@ -70,7 +70,7 @@ export class GroupController {
         const groupId = req.params.id;
         const { userIds } = req.body;
         await this.groupService.addUsersToGroup(groupId, JSON.parse(userIds));
-        res.status(StatusCodes.NO_CONTENT).end();
+        res.sendStatus(StatusCodes.NO_CONTENT);
       } catch (err) {
         res.sendStatus(StatusCodes.BAD_REQUEST);
       }

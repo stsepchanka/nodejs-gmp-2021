@@ -1,5 +1,5 @@
 import { app } from "./app";
-import { sequelize } from "./data-access/connectDB";
+import { sequelize } from "./db/connectDB";
 import { config } from "./common/config";
 
 sequelize

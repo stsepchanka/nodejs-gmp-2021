@@ -11,9 +11,13 @@ export class GroupController {
       try {
         const groupId = req.params.id;
         const group = await this.groupService.getGroupByID(groupId);
-        res.status(StatusCodes.OK).json(group);
+        if (group) {
+          res.status(StatusCodes.OK).json(group);
+        } else {
+          res.sendStatus(StatusCodes.NOT_FOUND);
+        }
       } catch (err) {
-        res.sendStatus(StatusCodes.NOT_FOUND);
+        res.sendStatus(StatusCodes.BAD_REQUEST);
       }
     };
   }
@@ -23,7 +27,11 @@ export class GroupController {
       try {
         const groupId = req.params.id;
         const group = await this.groupService.updateGroup(groupId, req.body);
-        res.status(StatusCodes.OK).json(group);
+        if (group) {
+          res.status(StatusCodes.OK).json(group);
+        } else {
+          res.sendStatus(StatusCodes.NOT_FOUND);
+        }
       } catch (err) {
         res.sendStatus(StatusCodes.BAD_REQUEST);
       }

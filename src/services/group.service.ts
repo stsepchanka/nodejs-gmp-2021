@@ -12,11 +12,7 @@ export class GroupService {
       where: { id: groupId },
     });
 
-    if (!group) {
-      throw `Group with id=${groupId} is not found`;
-    }
-
-    return group.toDomain();
+    return group?.toDomain() || null;
   }
 
   async getGroupByName(groupName: string): Promise<IGroup> {
@@ -24,20 +20,12 @@ export class GroupService {
       where: { name: groupName },
     });
 
-    if (!group) {
-      throw `Group with name=${groupName} is not found`;
-    }
-
-    return group.toDomain();
+    return group?.toDomain() || null;
   }
 
   async addGroup(group: IGroup): Promise<IGroup> {
-    let groupWithSameName;
-    try {
-      groupWithSameName = await this.getGroupByName(group.name);
-    } catch {
-      groupWithSameName = null;
-    }
+    const groupWithSameName = await this.getGroupByName(group.name);
+
     if (!groupWithSameName) {
       const newGroup = await Group.create(group);
       return newGroup.toDomain();
@@ -47,14 +35,9 @@ export class GroupService {
   }
 
   async updateGroup(groupId: string, group: IGroup): Promise<IGroup> {
-    let groupWithSameName;
-    try {
-      groupWithSameName = await this.getGroupByName(group.name);
-    } catch {
-      groupWithSameName = null;
-    }
+    const groupWithSameName = await this.getGroupByName(group.name);
 
-    if (groupWithSameName.id === groupId) {
+    if (!groupWithSameName || groupWithSameName.id === groupId) {
       await Group.update(group, { where: { id: groupId } });
       return await this.getGroupByID(groupId);
     }

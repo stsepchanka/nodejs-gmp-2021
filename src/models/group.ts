@@ -1,6 +1,7 @@
 import * as Joi from "joi";
 import { DataTypes, Model, UUIDV4 } from "sequelize";
 import { sequelize } from "../db/connectDB";
+import { ValidationError } from "../errors";
 
 export enum Permission {
   Read = "READ",
@@ -53,7 +54,15 @@ Group.init(
               (value) => !PERMISSIONS.find((permission) => permission === value)
             );
           if (wrongPermission) {
-            throw `Wrong permission ${wrongPermission}`;
+            throw new ValidationError({
+              status: "failed",
+              errors: [
+                {
+                  path: "permissions",
+                  message: `Wrong permission ${wrongPermission}`,
+                },
+              ],
+            });
           }
         },
       },

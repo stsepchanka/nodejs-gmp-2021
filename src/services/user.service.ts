@@ -1,4 +1,5 @@
 import { Op } from "sequelize";
+import { IncorrectRequestToDBError } from "../errors";
 
 import { IUser } from "../models";
 import { User } from "../models";
@@ -34,7 +35,9 @@ export class UserService {
       return newUser.toDomain();
     }
 
-    throw `User with login=${user.login} already exists`;
+    throw new IncorrectRequestToDBError(
+      `User with login=${user.login} already exists`
+    );
   }
 
   async updateUser(userId: string, user: IUser): Promise<IUser> {
@@ -45,7 +48,9 @@ export class UserService {
       return await this.getUserByID(userId);
     }
 
-    throw `User with login=${user.login} already exists`;
+    throw new IncorrectRequestToDBError(
+      `User with login=${user.login} already exists`
+    );
   }
 
   async deleteUserById(userId: string): Promise<void> {

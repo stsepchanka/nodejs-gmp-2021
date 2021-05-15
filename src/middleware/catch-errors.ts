@@ -24,7 +24,7 @@ export function catchErrors(
         query
       )}; validation error: ${JSON.stringify(err.details.errors)}`
     );
-    return res.status(err.status).json(err.details);
+    return res.status(StatusCodes.BAD_REQUEST).json(err.details);
   }
 
   if (err instanceof NotFoundError) {
@@ -35,7 +35,7 @@ export function catchErrors(
         err.text
       }`
     );
-    return res.sendStatus(err.status);
+    return res.sendStatus(StatusCodes.NOT_FOUND);
   }
 
   if (err instanceof IncorrectRequestToDBError) {
@@ -46,7 +46,7 @@ export function catchErrors(
         err.text
       }`
     );
-    return res.sendStatus(err.status);
+    return res.sendStatus(StatusCodes.BAD_REQUEST);
   }
 
   if (err instanceof SequelizeValidationError) {

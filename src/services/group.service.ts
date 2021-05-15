@@ -33,7 +33,7 @@ export class GroupService {
     }
 
     throw new IncorrectRequestToDBError(
-      `Group with login=${group.name} already exists`
+      `Group with name=${group.name} already exists`
     );
   }
 
@@ -46,7 +46,7 @@ export class GroupService {
     }
 
     throw new IncorrectRequestToDBError(
-      `Group with login=${group.name} already exists`
+      `Group with name=${group.name} already exists`
     );
   }
 

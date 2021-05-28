@@ -1,4 +1,5 @@
 import { sequelize } from "../db/connectDB";
+import { IncorrectRequestToDBError } from "../errors";
 import { IGroup } from "../models";
 import { Group } from "../models";
 
@@ -31,7 +32,9 @@ export class GroupService {
       return newGroup.toDomain();
     }
 
-    throw `Group with login=${group.name} already exists`;
+    throw new IncorrectRequestToDBError(
+      `Group with name=${group.name} already exists`
+    );
   }
 
   async updateGroup(groupId: string, group: IGroup): Promise<IGroup> {
@@ -42,7 +45,9 @@ export class GroupService {
       return await this.getGroupByID(groupId);
     }
 
-    throw `Group with login=${group.name} already exists`;
+    throw new IncorrectRequestToDBError(
+      `Group with name=${group.name} already exists`
+    );
   }
 
   async deleteGroupById(groupId: string): Promise<void> {
@@ -63,7 +68,9 @@ export class GroupService {
     } catch (error) {
       await t.rollback();
 
-      throw `Users were not added to the groupId="${groupId}"`;
+      throw new IncorrectRequestToDBError(
+        `Users were not added to the groupId="${groupId}"`
+      );
     }
   }
 }

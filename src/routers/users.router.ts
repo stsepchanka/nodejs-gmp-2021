@@ -1,7 +1,7 @@
 import express from "express";
 import { Router } from "express";
 
-import { validateSchema } from "../middleware";
+import { trackExecutionTime, validateSchema } from "../middleware";
 import { UserService } from "../services";
 import { UserController } from "./user.controller";
 import { userSchema } from "../models";
@@ -21,8 +21,11 @@ export function usersRouter(): Router {
 
   router
     .route("/")
-    .get(userController.getUsers())
-    .post(validateSchema(userSchema), userController.addUser());
+    .get(trackExecutionTime(userController.getUsers()))
+    .post(
+      trackExecutionTime(validateSchema(userSchema)),
+      trackExecutionTime(userController.addUser())
+    );
 
   return router;
 }

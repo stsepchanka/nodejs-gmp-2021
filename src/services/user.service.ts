@@ -27,6 +27,17 @@ export class UserService {
     return user?.toDomain() || null;
   }
 
+  async getUserByLoginAndPassword(
+    login: string,
+    password: string
+  ): Promise<IUser> {
+    const user = await User.findOne({
+      where: { login, password, isDeleted: false },
+    });
+
+    return user?.toDomain() || null;
+  }
+
   async addUser(user: IUser): Promise<IUser> {
     const userWithSameLogin = await this.getUserByLogin(user.login);
 

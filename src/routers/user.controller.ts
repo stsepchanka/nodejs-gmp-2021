@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
-import { NotFoundError } from "../errors";
 
+import { NotFoundError } from "../errors";
 import { UserService } from "../services";
 
 export class UserController {

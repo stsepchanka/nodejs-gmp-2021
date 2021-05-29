@@ -2,8 +2,10 @@ import { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
 import { ValidationError as SequelizeValidationError } from "sequelize";
 import {
+  ForbiddenError,
   IncorrectRequestToDBError,
   NotFoundError,
+  UnauthorizedError,
   ValidationError,
 } from "../errors";
 import { logger } from "../logger";
@@ -36,6 +38,26 @@ export function catchErrors(
       }`
     );
     return res.sendStatus(StatusCodes.NOT_FOUND);
+  }
+
+  if (err instanceof ForbiddenError) {
+    logger.error(
+      `${method} ${url}; body: ${JSON.stringify(
+        body
+      )}; query params: ${JSON.stringify(query)}; access is forbidden: ${
+        err.text
+      }`
+    );
+    return res.sendStatus(StatusCodes.FORBIDDEN);
+  }
+
+  if (err instanceof UnauthorizedError) {
+    logger.error(
+      `${method} ${url}; body: ${JSON.stringify(
+        body
+      )}; query params: ${JSON.stringify(query)}; unauthorized: ${err.text}`
+    );
+    return res.sendStatus(StatusCodes.UNAUTHORIZED);
   }
 
   if (err instanceof IncorrectRequestToDBError) {

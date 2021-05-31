@@ -4,6 +4,7 @@ import { ValidationError as SequelizeValidationError } from "sequelize";
 import {
   ForbiddenError,
   IncorrectRequestToDBError,
+  MethodNotAllowedError,
   NotFoundError,
   UnauthorizedError,
   ValidationError,
@@ -58,6 +59,15 @@ export function catchErrors(
       )}; query params: ${JSON.stringify(query)}; unauthorized: ${err.text}`
     );
     return res.sendStatus(StatusCodes.UNAUTHORIZED);
+  }
+
+  if (err instanceof MethodNotAllowedError) {
+    logger.error(
+      `${method} ${url}; body: ${JSON.stringify(
+        body
+      )}; query params: ${JSON.stringify(query)}; unauthorized: ${err.text}`
+    );
+    return res.sendStatus(StatusCodes.METHOD_NOT_ALLOWED);
   }
 
   if (err instanceof IncorrectRequestToDBError) {

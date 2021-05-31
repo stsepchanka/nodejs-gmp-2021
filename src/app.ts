@@ -3,10 +3,11 @@ import cors from "cors";
 
 import { authorize, catchErrors, logInvokedMethods } from "./middleware";
 import { loginRouter, usersRouter, groupsRouter } from "./routers";
+import { corsOptions } from "./common/corsOptions";
 
 export const app = express();
 
-app.use(cors());
+app.use(cors(corsOptions));
 
 app.use(express.json());
 

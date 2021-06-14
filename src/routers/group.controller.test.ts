@@ -3,9 +3,14 @@ import { Request } from "express";
 import { StatusCodes } from "http-status-codes";
 
 import { GroupController } from "./group.controller";
+import { Group } from "../models";
 import { GroupService } from "../services/group.service";
 import { NotFoundError } from "../errors";
-import { Group } from "../models";
+
+jest.mock("../db/connectDB", () => ({}));
+jest.mock("../models/group", () => ({ init: jest.fn() }));
+jest.mock("../models/user", () => ({ init: jest.fn() }));
+jest.mock("../models/userGroup", () => ({ init: jest.fn() }));
 
 jest.mock("../services/group.service");
 

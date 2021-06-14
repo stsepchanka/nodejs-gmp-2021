@@ -3,12 +3,16 @@ import { Request } from "express";
 import { StatusCodes } from "http-status-codes";
 
 import { UserController } from "./user.controller";
-import { UserService } from "../services/user.service";
-import { NotFoundError } from "../errors";
 import { User } from "../models";
+import { UserService } from "../services/user.service";
+import { NotFoundError } from "../errors/not-found.error";
+
+jest.mock("../db/connectDB", () => ({}));
+jest.mock("../models/group", () => ({ init: jest.fn() }));
+jest.mock("../models/user", () => ({ init: jest.fn() }));
+jest.mock("../models/userGroup", () => ({ init: jest.fn() }));
 
 jest.mock("../services/user.service");
-
 const UserServiceMock = UserService as jest.MockedClass<typeof UserService>;
 const NotFoundErrorMock = NotFoundError as jest.MockedClass<
   typeof NotFoundError
